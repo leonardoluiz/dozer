@@ -18,6 +18,7 @@ package com.github.dozermapper.core.classmap;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.dozermapper.core.MappingException;
 import com.github.dozermapper.core.converters.CustomConverterContainer;
 import com.github.dozermapper.core.fieldmap.FieldMap;
 import com.github.dozermapper.core.util.DozerConstants;
@@ -25,6 +26,7 @@ import com.github.dozermapper.core.util.MappingUtils;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 
 /**
  * Internal class that represents a class mapping definition. Holds all of the information about a single class mapping.
@@ -145,6 +147,12 @@ public class ClassMap {
     }
 
     public void addFieldMapping(FieldMap fieldMap) {
+
+        if (getFieldMapUsingSrc(fieldMap.getSrcFieldName()) == null) {
+            throw new MappingException(
+                    "More than one mapping applied to the same field '" + fieldMap.getSrcFieldName() + "'.");
+        }
+
         fieldMaps.add(fieldMap);
     }
 
