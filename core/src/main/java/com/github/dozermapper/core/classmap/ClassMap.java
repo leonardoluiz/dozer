@@ -18,6 +18,7 @@ package com.github.dozermapper.core.classmap;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.dozermapper.core.MappingException;
 import com.github.dozermapper.core.converters.CustomConverterContainer;
 import com.github.dozermapper.core.fieldmap.FieldMap;
 import com.github.dozermapper.core.util.DozerConstants;
@@ -145,6 +146,10 @@ public class ClassMap {
     }
 
     public void addFieldMapping(FieldMap fieldMap) {
+        if (getFieldMapUsingDest(fieldMap.getSrcFieldName()) != null) {
+            throw new MappingException("Only one mapping should exist for each field. '" + getSrcClassName() + "."
+                    + fieldMap.getSrcFieldName() + "'");
+        }
         fieldMaps.add(fieldMap);
     }
 
